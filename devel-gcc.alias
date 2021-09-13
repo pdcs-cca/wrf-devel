@@ -53,7 +53,7 @@ alias SZIP-2.1.1-CLUSTER-build="		pushd \$PWD ;  __pre-install	    szip 2.1.1 sz
 alias JASPER-1.900.1-CLUSTER-build="	pushd \$PWD ;  __pre-install	    jasper 1.900.1 jasper-1.900.1.tar.gz && 	CLUSTER-build --prefix=\$HOME_APPS_JASPER &&	CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua jasper 1.900.1                                   ; __post-install jasper 1.900.1 jasper-1.900.1.tar.gz ; popd "
 alias CURL-7.67.0-CLUSTER-build="		pushd \$PWD ;  __pre-install	    curl 7.67.0 curl-7.67.0.tar.gz && 		    CLUSTER-build --prefix=\$HOME_APPS_CURL 	--with-zlib=\$ZLIB_ROOT CPPFLAGS=\$ZLIB_CPPFLAGS LDFLAGS=\"\$ZLIB_LDFLAGS\" && CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua curl 7.67.0 ; __post-install curl 7.67.0 curl-7.67.0.tar.gz ; popd"
 alias LIBPNG-1.6.37-CLUSTER-build="		pushd \$PWD ;  __pre-install	    libpng 1.6.37 libpng-1.6.37.tar.gz && 		CLUSTER-build --prefix=\$HOME_APPS_LIBPNG 	--with-zlib-prefix=\$ZLIB_ROOT  CPPFLAGS=\$ZLIB_CPPFLAGS LDFLAGS=\"\$ZLIB_LDFLAGS\" && CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua libpng 1.6.37  ; __post-install libpng 1.6.37 libpng-1.6.37.tar.gz; popd" 
-alias HDF5-1.10.5-CLUSTER-build="		pushd \$PWD ;  __pre-install	    hdf5 1.10.5 hdf5-1.10.5.tar.gz && 		    CLUSTER-build --prefix=\$HOME_APPS_HDF5 	--with-zlib=\$ZLIB_ROOT --with-szlib=\$SZIP_ROOT --enable-fortran  CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS\" && CLUSTER-make && CLUSTER-check  && CLUSTER-install && INSTALL-ok && __module_lua hdf5 1.10.5 ; __post-install hdf5 1.10.5 hdf5-1.10.5.tar.gz; popd" 
+alias HDF5-1.10.5-CLUSTER-build="		pushd \$PWD ;  __pre-install	    hdf5 1.10.5 hdf5-1.10.5.tar.gz && 		    CLUSTER-build --prefix=\$HOME_APPS_HDF5 	--with-zlib=\$ZLIB_ROOT --with-szlib=\$SZIP_ROOT --enable-fortran  CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS\" && CLUSTER-make && CLUSTER-install && INSTALL-ok && __module_lua hdf5 1.10.5 ; __post-install hdf5 1.10.5 hdf5-1.10.5.tar.gz; popd" 
 alias NETCDF-c-4.7.0-CLUSTER-build="		pushd \$PWD ;  __pre-install	netcdf-c 4.7.0 netcdf-c-4.7.0.tar.gz &&		CLUSTER-build --prefix=\$HOME_APPS_NETCDF 	--disable-dap-remote-tests CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS \$CURL_CPPFLAGS \$HDF5_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS \$CURL_LDFLAGS \$HDF5_LDFLAGS\" && CLUSTER-make && CLUSTER-check && CLUSTER-install && INSTALL-ok && __module_lua  netcdf c-4.7.0-fortran-4.4.5  ; __post-install netcdf-c 4.7.0 netcdf-c-4.7.0.tar.gz; popd " 
 alias NETCDF-fortran-4.4.5-CLUSTER-build="	pushd \$PWD ;  __pre-install	netcdf-fortran 4.4.5 netcdf-fortran-4.4.5.tar.gz && CLUSTER-build --prefix=\$HOME_APPS_NETCDF	CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS \$CURL_CPPFLAGS \$HDF5_CPPFLAGS \$NETCDF_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS \$CURL_LDFLAGS \$HDF5_CPPFLAGS \$NETCDF_LDFLAGS\" && CLUSTER-make && CLUSTER-check && CLUSTER-install && INSTALL-ok && __module_lua netcdf c-4.7.0-fortran-4.4.5  ; __post-install netcdf-fortran 4.4.5 netcdf-fortran-4.4.5.tar.gz ; popd" 
 
@@ -100,7 +100,7 @@ $MODULE_FILE
 USAR LOS SIGUIENTES COMANDOS PARA TENER ACCESO AL SOFTWARE
 
 module use $HOME_APPS/modulefiles/Compiler/$COMPILER_VERSION
-module load $APP_NAME/${APP_VERSION}.tcl
+module load $APP_NAME/${APP_VERSION}
 
 ####################
 "
