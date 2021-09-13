@@ -1,0 +1,154 @@
+#!/bin/bash
+# pdcs@atmosfera.unam.mx 
+# zlib
+# szip
+# jasper
+# curl
+# libpng
+# hdf5 netcdf-c netcdf-fortran compile-wrf
+# Establecer directorio para instalacion de software y archivos de modulo
+# en la variable HOME_APPS
+export HOME_APPS="$HOME/software/apps"
+
+# Establecer ubicacion de los archivos de software 
+# en la variable HOME_APPS_SOURCE
+export HOME_APPS_SOURCE="/opt/src"
+
+# ./configure --prefix=$HOME_APPS/$COMPILER_VERSION/zlib 
+export COMPILER_VERSION="gcc/8.3.0-6"
+export CLUSTER_COMPILERS="CC=gcc FC=gfortran F77=gfortran F90=gfortran CXX=g++"
+export COMPFLAGS_OPT=""
+
+export CLUSTER_CFLAGS="$COMPFLAGS_OPT"
+export CLUSTER_CXXFLAGS="$COMPFLAGS_OPT"
+export CLUSTER_FFLAGS="$COMPFLAGS_OPT"
+export CLUSTER_FCFLAGS="$COMPFLAGS_OPT"
+
+export HOME_APPS_ZLIB="$HOME_APPS/zlib/$COMPILER_VERSION/1.2.11"
+export HOME_APPS_SZIP="$HOME_APPS/szip/$COMPILER_VERSION/2.1.1"
+export HOME_APPS_JASPER="$HOME_APPS/jasper/$COMPILER_VERSION/1.900.1"
+export HOME_APPS_CURL="$HOME_APPS/curl/$COMPILER_VERSION/7.67.0"
+export HOME_APPS_LIBPNG="$HOME_APPS/libpng/$COMPILER_VERSION/1.6.37"
+export HOME_APPS_HDF5="$HOME_APPS/hdf5/$COMPILER_VERSION/1.10.5"
+export HOME_APPS_NETCDF="$HOME_APPS/netcdf/$COMPILER_VERSION/c-4.7.0-fortran-4.4.5"
+export HOME_APPS_WRF="$HOME_APPS/wrf/$COMPILER_VERSION/WRFV3"
+export HOME_APPS_WPS="$HOME_APPS/wrf/$COMPILER_VERSION/WPS-3.9"
+
+alias logsave="/sbin/logsave"
+alias CLUSTER-configure="	logsave \$(date +%s).CONFIGURE \time -v ./configure "
+alias CLUSTER-make="		logsave \$(date +%s).MAKE \time -v make -j4"
+alias CLUSTER-check="		logsave \$(date +%s).MAKE.CHECK \time -v make check "
+alias CLUSTER-test="		logsave \$(date +%s).MAKE.TEST \time -v make test "
+alias CLUSTER-install="		logsave \$(date +%s).MAKE.INSTALL \time -v make install "
+alias CLUSTER-compilers="	$CLUSTER_COMPILERS "
+alias CLUSTER-compile-wrf-em-real="     logsave \$(date +%s).COMPILE.wrf.em-real \time -v ./compile em_real "
+alias CLUSTER-compile-wps="     	logsave \$(date +%s).COMPILE.wps \time -v ./compile "
+
+alias CLUSTER-compilers-flags='CFLAGS="$CLUSTER_CFLAGS" CXXFLAGS="$CLUSTER_CXXFLAGS"  FFLAGS="$CLUSTER_FFLAGS" FCFLAGS="$CLUSTER_FCFLAGS" '
+alias CLUSTER-build="CLUSTER-configure CLUSTER-compilers CLUSTER-compilers-flags "
+
+alias INSTALL-ok="echo -e  \"\n####################\nOK!!\" "
+alias ZLIB-1.2.11-CLUSTER-build="		pushd \$PWD ;  __pre-install        zlib 1.2.11 zlib-1.2.11.tar.gz &&   	    CLUSTER-compilers CLUSTER-compilers-flags 	CLUSTER-configure  --prefix=\$HOME_APPS_ZLIB && CLUSTER-make && CLUSTER-install && INSTALL-ok && __module_lua  zlib 1.2.11  ; __post-install zlib 1.2.11 zlib-1.2.11.tar.gz ; popd "
+alias SZIP-2.1.1-CLUSTER-build="		pushd \$PWD ;  __pre-install	    szip 2.1.1 szip-2.1.1.tar.gz &&  		    CLUSTER-build --prefix=\$HOME_APPS_SZIP &&	CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua szip 2.1.1                                                   ; __post-install  szip 2.1.1 szip-2.1.1.tar.gz ; popd"
+alias JASPER-1.900.1-CLUSTER-build="	pushd \$PWD ;  __pre-install	    jasper 1.900.1 jasper-1.900.1.tar.gz && 	CLUSTER-build --prefix=\$HOME_APPS_JASPER &&	CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua jasper 1.900.1                                   ; __post-install jasper 1.900.1 jasper-1.900.1.tar.gz ; popd "
+alias CURL-7.67.0-CLUSTER-build="		pushd \$PWD ;  __pre-install	    curl 7.67.0 curl-7.67.0.tar.gz && 		    CLUSTER-build --prefix=\$HOME_APPS_CURL 	--with-zlib=\$ZLIB_ROOT CPPFLAGS=\$ZLIB_CPPFLAGS LDFLAGS=\"\$ZLIB_LDFLAGS\" && CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua curl 7.67.0 ; __post-install curl 7.67.0 curl-7.67.0.tar.gz ; popd"
+alias LIBPNG-1.6.37-CLUSTER-build="		pushd \$PWD ;  __pre-install	    libpng 1.6.37 libpng-1.6.37.tar.gz && 		CLUSTER-build --prefix=\$HOME_APPS_LIBPNG 	--with-zlib-prefix=\$ZLIB_ROOT  CPPFLAGS=\$ZLIB_CPPFLAGS LDFLAGS=\"\$ZLIB_LDFLAGS\" && CLUSTER-make && CLUSTER-install &&  INSTALL-ok && __module_lua libpng 1.6.37  ; __post-install libpng 1.6.37 libpng-1.6.37.tar.gz; popd" 
+alias HDF5-1.10.5-CLUSTER-build="		pushd \$PWD ;  __pre-install	    hdf5 1.10.5 hdf5-1.10.5.tar.gz && 		    CLUSTER-build --prefix=\$HOME_APPS_HDF5 	--with-zlib=\$ZLIB_ROOT --with-szlib=\$SZIP_ROOT --enable-fortran  CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS\" && CLUSTER-make && CLUSTER-check  && CLUSTER-install && INSTALL-ok && __module_lua hdf5 1.10.5 ; __post-install hdf5 1.10.5 hdf5-1.10.5.tar.gz; popd" 
+alias NETCDF-c-4.7.0-CLUSTER-build="		pushd \$PWD ;  __pre-install	netcdf-c 4.7.0 netcdf-c-4.7.0.tar.gz &&		CLUSTER-build --prefix=\$HOME_APPS_NETCDF 	--disable-dap-remote-tests CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS \$CURL_CPPFLAGS \$HDF5_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS \$CURL_LDFLAGS \$HDF5_LDFLAGS\" && CLUSTER-make && CLUSTER-check && CLUSTER-install && INSTALL-ok && __module_lua  netcdf c-4.7.0-fortran-4.4.5  ; __post-install netcdf-c 4.7.0 netcdf-c-4.7.0.tar.gz; popd " 
+alias NETCDF-fortran-4.4.5-CLUSTER-build="	pushd \$PWD ;  __pre-install	netcdf-fortran 4.4.5 netcdf-fortran-4.4.5.tar.gz && CLUSTER-build --prefix=\$HOME_APPS_NETCDF	CPPFLAGS=\"\$ZLIB_CPPFLAGS \$SZIP_CPPFLAGS \$CURL_CPPFLAGS \$HDF5_CPPFLAGS \$NETCDF_CPPFLAGS\" LDFLAGS=\"\$ZLIB_LDFLAGS \$SZIP_LDFLAGS \$CURL_LDFLAGS \$HDF5_CPPFLAGS \$NETCDF_LDFLAGS\" && CLUSTER-make && CLUSTER-check && CLUSTER-install && INSTALL-ok && __module_lua netcdf c-4.7.0-fortran-4.4.5  ; __post-install netcdf-fortran 4.4.5 netcdf-fortran-4.4.5.tar.gz ; popd" 
+
+alias WRF-GRIB2-V3.9.1.1="pushd \$PWD ; __compile-wrf ; popd "
+alias WPS-GRIB2-V3.9="pushd \$PWD ; __compile-wps ; popd "
+alias HYCOM-2.2.98-ALL-2.2.72="pushd \$PWD ; __compile-hycom; popd"
+
+
+function __module_lua(){
+local APP_NAME="$1" 
+local APP_VERSION="$2"
+
+local MODULE_FILE="$HOME_APPS/modulefiles/Compiler/$COMPILER_VERSION/$APP_NAME/${APP_VERSION}.lua"
+
+local __CPPFLAGS="$(echo $APP_NAME | tr [:lower:] [:upper:])_CPPFLAGS"
+local __LDFLAGS="$(echo $APP_NAME | tr [:lower:] [:upper:])_LDFLAGS"
+local __ROOT="$(echo $APP_NAME | tr [:lower:] [:upper:])_ROOT"
+local __PATH="$(echo $APP_NAME | tr [:lower:] [:upper:])_PATH"
+
+mkdir -pv $HOME_APPS/modulefiles/Compiler/$COMPILER_VERSION/$APP_NAME/ && \
+
+cat <<EOF | tee $MODULE_FILE
+local apps 		= "$HOME_APPS"
+local pkg               = "$APP_NAME"
+local pkg_version       = "$APP_VERSION"
+local compiler_version  = "$COMPILER_VERSION"
+local base              = pathJoin(apps,pkg,compiler,compiler_version,pkg_version) 
+
+
+prepend_path("PATH",pathJoin(base,"bin"))
+prepend_path("LD_LIBRARY_PATH",pathJoin(base,"lib"))
+
+setenv("${__CPPFLAGS}","-I"..base.."/include")
+setenv("${__LDFLAGS}","-L"..base.."/lib -Wl,-rpath="..base.."/lib")
+setenv("${__ROOT}",base)
+setenv("${__PATH}",base)
+
+EOF
+
+echo "####################
+SE GENERO ARCHIVO DE MODULO PARA $APP_NAME $APP_VERSION 
+$MODULE_FILE
+
+USAR LOS SIGUIENTES COMANDOS PARA TENER ACCESO AL SOFTWARE
+
+module use $HOME_APPS/modulefiles/Compiler/$COMPILER_VERSION
+module load $APP_NAME/${APP_VERSION}.tcl
+
+####################
+"
+
+}
+
+
+function __post-install(){
+
+local APP_NAME=$1 
+local APP_VERSION=$2
+local APP_FILE=$3
+
+echo "*** EL REGISTRO DE LA COMPILACION PUEDE CONSULTARSE EN EL DIRECTORIO DE COMPILACION ***
+$HOME_APPS/$APP_NAME/$COMPILER_VERSION/build/$APP_NAME-$APP_VERSION
+"
+}
+function __pre-install(){
+
+local APP_NAME=$1 
+local APP_VERSION=$2
+local APP_FILE=$3
+test ! -e $HOME_APPS_SOURCE/$APP_FILE && echo "::* No se encuentra el archivo $HOME_APPS_SOURCE/$APP_FILE " && return  
+
+clear 
+echo "
+
+:: INSTALACION DE $APP_NAME VERSION $APP_VERSION A PARTIR DEL ARCHIVO 
+$HOME_APPS_SOURCE/$APP_FILE
+
+:: EN la ruta $HOME_APPS/$APP_NAME/$COMPILER_VERSION/$APP_VERSION
+
+:: EL REGISTRO DE LA COMPILACION PUEDE CONSULTARSE EN EL DIRECTORIO 
+$HOME_APPS/$APP_NAME/$COMPILER_VERSION/build/$APP_NAME-$APP_VERSION
+
+*** Verificar que se tienen los modulos de software cargados ***
+
+"
+
+module list || return 1  
+read -p CONTINUAR... 
+test ! -d $HOME_APPS/$APP_NAME/$COMPILER_VERSION/build && mkdir -pv $HOME_APPS/$APP_NAME/$COMPILER_VERSION/build
+test ! -d $HOME_APPS/$APP_NAME/src && mkdir -pv $HOME_APPS/$APP_NAME/src
+test ! -e $HOME_APPS/$APP_NAME/src/$APP_FILE && cp -v $HOME_APPS_SOURCE/$APP_FILE $HOME_APPS/$APP_NAME/src
+test -e "$HOME_APPS/$APP_NAME/src/$APP_FILE" && \
+cd $HOME_APPS/$APP_NAME/$COMPILER_VERSION/build && tar xzf $HOME_APPS_SOURCE/$APP_FILE 
+
+test -d $HOME_APPS/$APP_NAME/$COMPILER_VERSION/build/$APP_NAME-$APP_VERSION && cd $HOME_APPS/$APP_NAME/$COMPILER_VERSION/build/$APP_NAME-$APP_VERSION || return 1
+
+}
+
