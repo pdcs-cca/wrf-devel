@@ -14,6 +14,7 @@ export HOME_APPS="$HOME/software/apps"
 # en la variable HOME_APPS_SOURCE
 export HOME_APPS_SOURCE="/opt/src"
 
+#https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
 # ./configure --prefix=$HOME_APPS/$COMPILER_VERSION/zlib 
 export COMPILER_VERSION="gcc/8.3.0-6"
 export CLUSTER_COMPILERS="CC=gcc FC=gfortran F77=gfortran F90=gfortran CXX=g++"
